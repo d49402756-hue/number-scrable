@@ -215,8 +215,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔢 Number Scramble</h1>
-        <p class="subtitle">Unscramble the numbers to win!</p>
+        <h1>� Letter Scramble</h1>
+        <p class="subtitle">Decode the numbers to find the word!</p>
 
         <div class="stats">
             <div class="stat-item">
@@ -232,20 +232,20 @@
         <div class="game-section">
             <label class="label">Difficulty:</label>
             <div class="difficulty">
-                <button class="diff-btn active" data-difficulty="easy">Easy (2-3)</button>
-                <button class="diff-btn" data-difficulty="medium">Medium (4-5)</button>
-                <button class="diff-btn" data-difficulty="hard">Hard (6+)</button>
+                <button class="diff-btn active" data-difficulty="easy">Easy (3-5 letters)</button>
+                <button class="diff-btn" data-difficulty="medium">Medium (6-12 letters)</button>
+                <button class="diff-btn" data-difficulty="hard">Hard (9+ letters)</button>
             </div>
         </div>
 
         <div class="game-section">
-            <label class="label">Unscramble this:</label>
+            <label class="label">Decode this (1=A, 2=B, 3=C...):</label>
             <div class="scrambled" id="scrambledNumber">--</div>
 
             <div class="message" id="message"></div>
 
             <div class="input-section">
-                <input type="number" id="answer" placeholder="Your answer" autocomplete="off">
+                <input type="text" id="answer" placeholder="Your word" autocomplete="off">
                 <button onclick="checkAnswer()">Submit</button>
             </div>
 
@@ -256,36 +256,46 @@
         </div>
 
         <div class="footer">
-            Made with ❤️ • Guess the unscrambled number
+            Made with ❤️ • Decode numbers to find hidden words
         </div>
     </div>
 
     <script>
-        let currentNumber = null;
+        let currentWord = null;
         let currentScrambled = null;
         let score = 0;
         let attempts = 0;
         let difficulty = 'easy';
 
-        const difficultyRanges = {
-            easy: { min: 10, max: 99 },
-            medium: { min: 1000, max: 99999 },
-            hard: { min: 100000, max: 999999 }
+        const wordLists = {
+            easy: ['cat', 'dog', 'bird', 'fish', 'tree', 'house', 'book', 'apple', 'chair', 'table', 'sun', 'moon', 'star', 'rain', 'snow', 'flower', 'water', 'fire', 'wind', 'cloud'],
+            medium: ['computer', 'elephant', 'keyboard', 'mountain', 'butterfly', 'chocolate', 'adventure', 'rainbow', 'playground', 'telephone', 'calendar', 'universe', 'together', 'birthday', 'holiday'],
+            hard: ['programming', 'development', 'temperature', 'encyclopedia', 'mathematics', 'strawberry', 'skateboard', 'architecture', 'photography', 'personality']
         };
 
-        function scrambleNumber(num) {
-            const digits = num.toString().split('');
-            for (let i = digits.length - 1; i > 0; i--) {
+        function letterToNumber(letter) {
+            return letter.toUpperCase().charCodeAt(0) - 64; // A=1, B=2, ..., Z=26
+        }
+
+        function convertWordToNumbers(word) {
+            return word.split('').map(letterToNumber);
+        }
+
+        function scrambleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [digits[i], digits[j]] = [digits[j], digits[i]];
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
-            return digits.join('');
+            return shuffled;
         }
 
         function newGame() {
-            const range = difficultyRanges[difficulty];
-            currentNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-            currentScrambled = scrambleNumber(currentNumber);
+            const words = wordLists[difficulty];
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            const numberArray = convertWordToNumbers(currentWord);
+            const scrambledArray = scrambleArray(numberArray);
+            currentScrambled = scrambledArray.join(' ');
             document.getElementById('scrambledNumber').textContent = currentScrambled;
             document.getElementById('answer').value = '';
             document.getElementById('message').textContent = '';
@@ -296,11 +306,11 @@
         }
 
         function checkAnswer() {
-            const answer = parseInt(document.getElementById('answer').value);
+            const answer = document.getElementById('answer').value.trim().toLowerCase();
             const messageEl = document.getElementById('message');
 
-            if (isNaN(answer)) {
-                messageEl.textContent = 'Please enter a valid number!';
+            if (answer === '') {
+                messageEl.textContent = 'Please enter a word!';
                 messageEl.className = 'message error';
                 return;
             }
@@ -308,10 +318,10 @@
             attempts++;
             document.getElementById('attempts').textContent = attempts;
 
-            if (answer === currentNumber) {
+            if (answer === currentWord) {
                 score += Math.max(10 - attempts, 1);
                 document.getElementById('score').textContent = score;
-                messageEl.textContent = `🎉 Correct! You earned ${Math.max(10 - attempts, 1)} points!`;
+                messageEl.textContent = `🎉 Correct! "${currentWord.toUpperCase()}" - You earned ${Math.max(10 - attempts, 1)} points!`;
                 messageEl.className = 'message success';
                 setTimeout(() => newGame(), 2000);
             } else {
@@ -322,7 +332,7 @@
 
         function giveHint() {
             const messageEl = document.getElementById('message');
-            messageEl.textContent = `💡 Hint: The number is ${currentNumber.toString().length} digits`;
+            messageEl.textContent = `💡 Hint: The word is ${currentWord.length} letters long`;
             messageEl.className = 'message';
         }
 

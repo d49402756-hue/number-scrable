@@ -1,23 +1,23 @@
-# 🔢 Number Scramble
+# � Letter Scramble
 
-A fun and interactive game where you unscramble numbers to earn points!
+A fun and interactive game where you decode numbers into letters to find hidden words!
 
 ## 🎮 How to Play
 
-1. **View the scrambled number** displayed on the screen
-2. **Figure out the original number** by unscrambling the digits
-3. **Enter your answer** and click Submit
+1. **View the encoded numbers** - Each number represents a letter (1=A, 2=B, 3=C... 26=Z)
+2. **Decode the numbers** - Figure out what word the numbers represent
+3. **Enter your word answer** and click Submit
 4. **Score points** based on how quickly you get it right!
 
 ## 📊 Features
 
 - **Three Difficulty Levels:**
-  - 🟢 Easy: 2-3 digit numbers
-  - 🟡 Medium: 4-5 digit numbers
-  - 🔴 Hard: 6+ digit numbers
+  - 🟢 Easy: 3-5 letter words
+  - 🟡 Medium: 6-12 letter words
+  - 🔴 Hard: 9+ letter words
 
 - **Score Tracking:** Keep track of your points and attempts
-- **Hints:** Get a hint to help you unscramble the number
+- **Hints:** Get a hint to help you decode the numbers
 - **Responsive Design:** Play on desktop, tablet, or mobile
 
 ## 🚀 Live Game
