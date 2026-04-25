@@ -297,6 +297,7 @@
                 </select>
             </div>
             <button onclick="startNewGame()">Start Game</button>
+            <button onclick="checkWordManual()" style="background: #28a745;">Check Word</button>
             <button onclick="resetSelection()">Clear Selection</button>
         </div>
 
@@ -480,8 +481,22 @@
             } else {
                 gameState.selectedCells.push({ row, col });
                 cell.classList.add('selected');
-                checkWord();
             }
+        }
+
+        // Check word manually (called by button)
+        function checkWordManual() {
+            if (gameState.selectedCells.length === 0) {
+                const message = document.getElementById('message');
+                message.textContent = '⚠️ Please select some cells first!';
+                message.className = 'message';
+                message.style.display = 'block';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 2000);
+                return;
+            }
+            checkWord();
         }
 
         // Check if selected cells form a word
@@ -504,6 +519,15 @@
                     return;
                 }
             }
+
+            // No word found
+            const message = document.getElementById('message');
+            message.textContent = `❌ Not a word! You selected: ${selectedWord}`;
+            message.className = 'message';
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 2000);
         }
 
         // Word found
